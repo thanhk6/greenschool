@@ -1,0 +1,46 @@
+name: green_school
+description: "A new Flutter project."
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+environment:
+  sdk: ^3.9.0-172.0.dev
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.4.0
+  provider: ^6.1.5
+  flutter_svg: ^2.0.0
+  cupertino_icons: ^1.0.8
+  get: ^4.7.2
+  get_storage: ^2.1.1
+  dio: ^5.8.0+1
+  dio_log: 5.3.0+1
+  shimmer: ^3.0.0
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.9.0
+  fluttertoast: ^8.2.5
+  carousel_slider: ^5.0.0
+  webview_flutter: ^4.7.0
+  mobile_scanner: ^6.0.2
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mockito: ^5.4.6
+  build_runner: ^2.4.15
+  json_serializable: ^6.9.5
+  freezed: ^3.0.6
+
+  flutter_lints: ^5.0.0
+ 
+flutter:
+
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/images/
+    - assets/images/ic_qr.png
+    - assets/images/ic_logo.png
