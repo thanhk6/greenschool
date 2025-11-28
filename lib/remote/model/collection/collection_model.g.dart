@@ -40,11 +40,19 @@ CollectionItem _$CollectionItemFromJson(Map<String, dynamic> json) =>
       binCode: json['binCode'] ?? '',
       unitId: json['unitId'] ?? 0,
       unitName: json['unitName'] ?? '',
-      quantity: json['quantity'] ?? 0,
+      quantity: _parseData(json['quantity']),
       wasteTypeName: json['wasteTypeName'] ?? '',
       earnedPoints: json['earnedPoints'] ?? 0,
       dateAdded: DateTime.tryParse(json['dateAdded'] ?? '') ?? DateTime.now(),
     );
+
+_parseData(dynamic quantity) {
+  if (quantity is double) {
+    return quantity;
+  } else {
+    return quantity.toDouble();
+  }
+}
 
 Map<String, dynamic> _$CollectionItemToJson(CollectionItem instance) => <String, dynamic>{
   'id' : instance.id,

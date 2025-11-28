@@ -46,7 +46,7 @@ class EventResult {
   String binCode;
   int unitId;
   String unitName;
-  int quantity;
+  double quantity;
   String wasteTypeName;
   int earnedPoints;
   String dateAdded;

@@ -201,7 +201,7 @@ class _EventScreenState extends State<EventScreen> {
         model: EventCreateModel(
           userAppId: data[USER_APP_ID],
           binId: data[BIN_ID],
-          quantity: int.parse(quantityController.text),
+          quantity: double.parse(quantityController.text),
         ),
       );
     } else {

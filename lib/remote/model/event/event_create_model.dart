@@ -6,7 +6,7 @@ part 'event_create_model.g.dart';
 class EventCreateModel {
   int userAppId;
   int binId;
-  int quantity;
+  double quantity;
 
   EventCreateModel({required this.userAppId, required this.binId, required this.quantity});
 
