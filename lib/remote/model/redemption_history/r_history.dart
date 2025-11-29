@@ -48,7 +48,7 @@ class RedemptionHistoryItem {
   int rewardId;
   String rewardName;
   DateTime dateAdded;
-  double quantity;
+  int quantity;
   int totalPointsSpent;
 
   RedemptionHistoryItem({
