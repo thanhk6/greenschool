@@ -39,7 +39,7 @@ RedemptionHistoryItem _$RedemptionHistoryItemFromJson(Map<String, dynamic> json)
       rewardId: json['rewardId'] ?? 0,
       rewardName: json['rewardName'] ?? '',
       dateAdded: DateTime.tryParse(json['dateAdded'] ?? '') ?? DateTime.now(),
-      quantity: _parseData(json['quantity']),
+      quantity: json['quantity'] ?? 0,
       totalPointsSpent: json['totalPointsSpent'] ?? 0,
     );
 
