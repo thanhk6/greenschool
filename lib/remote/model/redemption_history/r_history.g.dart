@@ -39,9 +39,17 @@ RedemptionHistoryItem _$RedemptionHistoryItemFromJson(Map<String, dynamic> json)
       rewardId: json['rewardId'] ?? 0,
       rewardName: json['rewardName'] ?? '',
       dateAdded: DateTime.tryParse(json['dateAdded'] ?? '') ?? DateTime.now(),
-      quantity: json['quantity'] ?? '',
+      quantity: _parseData(json['quantity']),
       totalPointsSpent: json['totalPointsSpent'] ?? 0,
     );
+
+_parseData(dynamic quantity) {
+  if (quantity is double) {
+    return quantity;
+  } else {
+    return quantity.toDouble();
+  }
+}
 
 Map<String, dynamic> _$RedemptionHistoryItemToJson(RedemptionHistoryItem instance) => <String, dynamic>{
   'id' : instance.id,
