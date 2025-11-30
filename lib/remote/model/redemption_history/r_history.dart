@@ -6,12 +6,12 @@ part 'r_history.g.dart';
 class RedemptionHistoryModel {
   bool isSuccessed;
   String message;
-  RedemptionHistoryResult resultObj;
+  RedemptionHistoryResult data;
 
   RedemptionHistoryModel({
     required this.isSuccessed,
     required this.message,
-    required this.resultObj,
+    required this.data,
   });
 
   factory RedemptionHistoryModel.fromJson(Map<String, dynamic> json) =>
@@ -48,7 +48,7 @@ class RedemptionHistoryItem {
   int rewardId;
   String rewardName;
   DateTime dateAdded;
-  int quantity;
+  double quantity;
   int totalPointsSpent;
 
   RedemptionHistoryItem({

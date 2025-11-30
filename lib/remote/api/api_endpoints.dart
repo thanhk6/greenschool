@@ -15,5 +15,9 @@ class ApiEndpoints {
   final String postReward =
       "https://api.greenschool.io.vn/api/Reward/Redemption-create";
   final String getRewardHistory =
-      "https://api.greenschool.io.vn/api/Reward/Redemption-paging";
+      "https://api.greenschool.io.vn/api/Reward/redemption-history";
+  final String forgotPassword =
+      "https://api.greenschool.io.vn/api/UserApp/forgot-password";
+  final String resetPassword =
+      "https://api.greenschool.io.vn/api/UserApp/reset-password";
 }

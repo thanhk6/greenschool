@@ -1,6 +1,8 @@
 name: green_school
 description: "A new Flutter project."
 
+version: 1.0.2+2
+
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:

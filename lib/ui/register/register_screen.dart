@@ -137,6 +137,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     context,
                                     rootNavigator: true,
                                   ).pop();
+                                  viewModel.registerResponse.value =
+                                      ApiResponse.loading();
                                   enterLogin(data);
                                 },
                                 child: const Text('OK'),
@@ -172,10 +174,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           viewModel.register(
             model: CreateUserModel(
               fullName: fullnameController.text,
-              phoneNumber: "string",
-              userName: usernameController.text,
-              passwordHash: "string",
-              passwordSalt: "string",
+              phoneNumber: "",
+              email: usernameController.text,
               isActive: true,
               dob: "2025-10-21T14:52:02.955Z",
               password: passwordController.text,

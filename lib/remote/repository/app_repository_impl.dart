@@ -7,6 +7,8 @@ import 'package:green_school/remote/model/bin/bin_model.dart';
 import 'package:green_school/remote/model/collection/collection_model.dart';
 import 'package:green_school/remote/model/event/event_create_model.dart';
 import 'package:green_school/remote/model/event/event_model.dart';
+import 'package:green_school/remote/model/forgot_password/forgot_password_model.dart';
+import 'package:green_school/remote/model/forgot_password/reset_password_model.dart';
 import 'package:green_school/remote/model/info/info_model.dart';
 import 'package:green_school/remote/model/login/login_model.dart';
 import 'package:green_school/remote/model/login/user_login_model.dart';
@@ -195,7 +197,9 @@ class AppRepositoryImpl implements AppRepository {
   }
 
   @override
-  Future<ApiResponse<RedemptionModel>> postRedemtion(Map<String, dynamic> redemption) async {
+  Future<ApiResponse<RedemptionModel>> postRedemtion(
+    Map<String, dynamic> redemption,
+  ) async {
     String userToken = box.read(AppConst.USER_TOKEN) ?? '';
     try {
       dynamic response = await _httpManager.restRequest(
@@ -236,7 +240,56 @@ class AppRepositoryImpl implements AppRepository {
       );
 
       if (response != null) {
-        RedemptionHistoryModel jsonData = RedemptionHistoryModel.fromJson(response);
+        RedemptionHistoryModel jsonData = RedemptionHistoryModel.fromJson(
+          response,
+        );
+        return ApiResponse.success(data: jsonData);
+      } else {
+        return ApiResponse.error(message: "Request data failed!!");
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return ApiResponse.error(message: e.toString());
+    }
+  }
+
+  @override
+  Future<ApiResponse<ForgotPasswordModel>> forgotPassword({
+    required String email, required String newPassword
+  }) async {
+    try {
+      dynamic response = await _httpManager.restRequest(
+        url: ApiEndpoints().forgotPassword,
+        method: HttpMethods.post,
+        body: {'email': email, 'newPassword' : newPassword},
+      );
+
+      if (response != null) {
+        ForgotPasswordModel jsonData = ForgotPasswordModel.fromJson(response);
+        return ApiResponse.success(data: jsonData);
+      } else {
+        return ApiResponse.error(message: "Request data failed!!");
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return ApiResponse.error(message: e.toString());
+    }
+  }
+
+  @override
+  Future<ApiResponse<ResetPasswordModel>> resetPassword({
+    required String code,
+    required String newPassword,
+  }) async {
+    try {
+      dynamic response = await _httpManager.restRequest(
+        url: ApiEndpoints().resetPassword,
+        method: HttpMethods.post,
+        body: {'code': code, 'newPassword': newPassword},
+      );
+
+      if (response != null) {
+        ResetPasswordModel jsonData = ResetPasswordModel.fromJson(response);
         return ApiResponse.success(data: jsonData);
       } else {
         return ApiResponse.error(message: "Request data failed!!");

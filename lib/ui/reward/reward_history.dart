@@ -52,7 +52,7 @@ class _RewardHistoryState extends State<RewardHistory> {
             return viewModel.rewardHistoryResponse.value.when(
               loading: () => Container(),
               success: (data) {
-                List<RedemptionHistoryItem> items = data.resultObj.items;
+                List<RedemptionHistoryItem> items = data.data.items;
                 historyItems = List.generate(items.length, (index) {
                   return {
                     "date": TimeHelper.getTime(items[index].dateAdded),

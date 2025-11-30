@@ -3,13 +3,13 @@ part of 'r_history.dart';
 RedemptionHistoryModel _$RedemptionHistoryModelFromJson(Map<String, dynamic> json) => RedemptionHistoryModel(
   isSuccessed: json['isSuccessed'] ?? false,
   message: json['message'] ?? '',
-  resultObj: RedemptionHistoryResult.fromJson(json['resultObj']),
+  data: RedemptionHistoryResult.fromJson(json['data']),
 );
 
 Map<String, dynamic> _$RedemptionHistoryModelToJson(RedemptionHistoryModel instance) => <String, dynamic>{
   'isSuccessed': instance.isSuccessed,
   'message': instance.message,
-  'resultObj': instance.resultObj.toJson(),
+  'data': instance.data.toJson(),
 };
 
 RedemptionHistoryResult _$RedemptionHistoryResultFromJson(Map<String, dynamic> json) =>
@@ -39,9 +39,17 @@ RedemptionHistoryItem _$RedemptionHistoryItemFromJson(Map<String, dynamic> json)
       rewardId: json['rewardId'] ?? 0,
       rewardName: json['rewardName'] ?? '',
       dateAdded: DateTime.tryParse(json['dateAdded'] ?? '') ?? DateTime.now(),
-      quantity: json['quantity'] ?? '',
+      quantity: _parseData(json['quantity']),
       totalPointsSpent: json['totalPointsSpent'] ?? 0,
     );
+
+_parseData(dynamic quantity) {
+  if (quantity is double) {
+    return quantity;
+  } else {
+    return quantity.toDouble();
+  }
+}
 
 Map<String, dynamic> _$RedemptionHistoryItemToJson(RedemptionHistoryItem instance) => <String, dynamic>{
   'id' : instance.id,

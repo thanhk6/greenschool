@@ -2,6 +2,8 @@ import 'package:green_school/remote/model/bin/bin_model.dart';
 import 'package:green_school/remote/model/collection/collection_model.dart';
 import 'package:green_school/remote/model/event/event_create_model.dart';
 import 'package:green_school/remote/model/event/event_model.dart';
+import 'package:green_school/remote/model/forgot_password/forgot_password_model.dart';
+import 'package:green_school/remote/model/forgot_password/reset_password_model.dart';
 import 'package:green_school/remote/model/info/info_model.dart';
 import 'package:green_school/remote/model/login/login_model.dart';
 import 'package:green_school/remote/model/login/user_login_model.dart';
@@ -24,4 +26,12 @@ abstract class AppRepository {
     Map<String, dynamic> redemption,
   );
   Future<ApiResponse<RedemptionHistoryModel>> getRewardHistory();
+  Future<ApiResponse<ForgotPasswordModel>> forgotPassword({
+    required String email,
+    required String newPassword,
+  });
+  Future<ApiResponse<ResetPasswordModel>> resetPassword({
+    required String code,
+    required String newPassword,
+  });
 }

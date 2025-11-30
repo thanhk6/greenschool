@@ -4,6 +4,10 @@ import com.android.build.gradle.api.ApplicationVariant
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.tasks.TaskProvider
+import java.io.File
+import com.android.build.gradle.internal.tasks.FinalizeBundleTask
 
 plugins {
     id("com.android.application")
@@ -88,16 +92,6 @@ androidComponents {
         variant.outputs.forEach { output ->
             if (output is com.android.build.api.variant.impl.VariantOutputImpl) {
                 output.outputFileName = "GreenSchool_${flutter.versionName}.${flutter.versionCode}_${getFormattedDateTime()}-${variant.name}.apk"
-
-            val bundleDir = File("$buildDir/outputs/bundle/${variant.name}")
-            val originalFile = bundleDir.listFiles()?.find { it.extension == "aab" }
-
-            if (originalFile != null) {
-                val newFileName =
-                    "GreenSchool_${flutter.versionName}.${flutter.versionCode}_${getFormattedDateTime()}-${variant.name}.aab"
-                val newFile = File(bundleDir, newFileName)
-                originalFile.renameTo(newFile)
-            }
         }
     }
     }

@@ -4,6 +4,8 @@ import 'package:green_school/remote/model/bin/bin_model.dart';
 import 'package:green_school/remote/model/collection/collection_model.dart';
 import 'package:green_school/remote/model/event/event_create_model.dart';
 import 'package:green_school/remote/model/event/event_model.dart';
+import 'package:green_school/remote/model/forgot_password/forgot_password_model.dart';
+import 'package:green_school/remote/model/forgot_password/reset_password_model.dart';
 import 'package:green_school/remote/model/info/info_model.dart';
 import 'package:green_school/remote/model/login/login_model.dart';
 import 'package:green_school/remote/model/login/user_login_model.dart';
@@ -38,6 +40,10 @@ class AuthViewModel extends GetxController {
       const ApiResponse<RedemptionModel>.loading().obs;
   Rx<ApiResponse<RedemptionHistoryModel>> rewardHistoryResponse =
       const ApiResponse<RedemptionHistoryModel>.loading().obs;
+  Rx<ApiResponse<ForgotPasswordModel>> forgotPasswordResponse =
+      const ApiResponse<ForgotPasswordModel>.loading().obs;
+  Rx<ApiResponse<ResetPasswordModel>> resetPasswordResponse =
+      const ApiResponse<ResetPasswordModel>.loading().obs;
 
   Future<void> login({required UserLoginModel model}) async {
     loginResponse.value = ApiResponse.loading();
@@ -201,6 +207,50 @@ class AuthViewModel extends GetxController {
       },
       error: (message) {
         rewardHistoryResponse.value = ApiResponse.error(message: message);
+      },
+    );
+  }
+
+  Future<void> forgotPassword({required String email, required String newPassword}) async {
+    forgotPasswordResponse.value = ApiResponse.loading();
+
+    ApiResponse<ForgotPasswordModel> result = await _api.forgotPassword(
+      email: email,
+      newPassword: newPassword
+    );
+
+    result.when(
+      loading: () {
+        forgotPasswordResponse.value = ApiResponse.loading();
+      },
+      success: (data) {
+        forgotPasswordResponse.value = ApiResponse.success(data: data);
+      },
+      error: (error) {
+        rewardHistoryResponse.value = ApiResponse.error(message: error);
+      },
+    );
+  }
+
+  Future<void> resetPassword({
+    required String code,
+    required String newPassword,
+  }) async {
+    resetPasswordResponse.value = ApiResponse.loading();
+
+    ApiResponse<ResetPasswordModel> result = await _api.resetPassword(
+      code: code,
+      newPassword: newPassword,
+    );
+    result.when(
+      loading: () {
+        resetPasswordResponse.value = ApiResponse.loading();
+      },
+      success: (data) {
+        resetPasswordResponse.value = ApiResponse.success(data: data);
+      },
+      error: (error) {
+        resetPasswordResponse.value = ApiResponse.error(message: error);
       },
     );
   }

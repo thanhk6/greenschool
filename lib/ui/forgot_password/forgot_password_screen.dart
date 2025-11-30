@@ -7,17 +7,16 @@ import 'package:green_school/remote/model/login/user_login_model.dart';
 import 'package:green_school/remote/response/api_response.dart';
 import 'package:green_school/router/screen_name.dart';
 import 'package:green_school/ui/controller/auth_view_model.dart';
-import 'package:green_school/utils/app_const.dart';
 import 'package:shimmer/shimmer.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   AuthViewModel viewModel = Get.find<AuthViewModel>();
 
   final box = GetStorage();
@@ -56,66 +55,41 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  hintText: "Mật khẩu",
+                  hintText: "Mật khẩu mới",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
                   ),
                 ),
               ),
-              const SizedBox(height: 25),
-              SizedBox(
-                width: 150,
-                child: ElevatedButton(
-                  onPressed: () {
-                    login();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text("Đăng nhập"),
-                ),
-              ),
               Obx(() {
-                return viewModel.loginResponse.value.when(
+                return viewModel.forgotPasswordResponse.value.when(
                   loading: () => Container(),
                   success: (data) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      String title = "";
-                      String content = "";
-                      if (data.data is LoginDataFailed) {
-                        title = (data.data as LoginDataFailed).message;
-                        content = data.message.toString();
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text(title),
-                              content: Text(content),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    debugPrint("OK DIALOG");
-                                    Navigator.of(
-                                      context,
-                                      rootNavigator: true,
-                                    ).pop();
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      } else {
-                        box.write(AppConst.USER_TOKEN, data.data.toString());
-                        viewModel.loginResponse.value = ApiResponse.loading();
-                        enterHome(data);
-                      }
+                      String title = data.message;
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(title),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  debugPrint("OK DIALOG");
+                                  Navigator.of(
+                                    context,
+                                    rootNavigator: true,
+                                  ).pop();
+                                  viewModel.forgotPasswordResponse.value =
+                                      ApiResponse.loading();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     });
                     return Container();
                   },
@@ -133,7 +107,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: 150,
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(ScreenNames.register);
+                    if (usernameController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+                      viewModel.forgotPassword(email: usernameController.text, newPassword: passwordController.text);
+                    } else {
+                      showToast("Không được để trống địa chỉ email hoặc mật khẩu");
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -142,14 +120,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text("Đăng ký"),
+                  child: const Text("Gửi"),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Get.toNamed(ScreenNames.forgotPassword);
-                },
-                child: Text("Quên mật khẩu?"),
               ),
             ],
           ),
