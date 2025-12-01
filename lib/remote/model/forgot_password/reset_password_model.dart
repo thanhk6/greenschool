@@ -4,13 +4,13 @@ part 'reset_password_model.g.dart';
 
 @JsonSerializable()
 class ResetPasswordModel {
-  String? message;
-  int? statusCode;
+  String message;
+  int statusCode;
 
   @DataOrBoolConverter()
   final dynamic data;
 
-  ResetPasswordModel({this.message, this.statusCode, this.data});
+  ResetPasswordModel({required this.message, required this.statusCode, this.data});
 
   factory ResetPasswordModel.fromJson(Map<String, dynamic> json) =>
       _$ResetPasswordModelFromJson(json);

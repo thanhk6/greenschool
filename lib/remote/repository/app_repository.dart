@@ -28,10 +28,9 @@ abstract class AppRepository {
   Future<ApiResponse<RedemptionHistoryModel>> getRewardHistory();
   Future<ApiResponse<ForgotPasswordModel>> forgotPassword({
     required String email,
-    required String newPassword,
   });
   Future<ApiResponse<ResetPasswordModel>> resetPassword({
-    required String code,
+    required String token,
     required String newPassword,
   });
 }

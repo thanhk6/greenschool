@@ -4,6 +4,7 @@ import 'package:green_school/router/screen_controller.dart';
 import 'package:green_school/router/screen_name.dart';
 import 'package:get/get.dart';
 
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 void main() async {
   await GetStorage.init();
   runApp(const MyApp());
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue),
       initialRoute: ScreenNames.splash,
       getPages: AppScreens.screens,
+      navigatorObservers: [routeObserver],
     );
   }
 }

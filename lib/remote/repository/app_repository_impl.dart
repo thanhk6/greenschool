@@ -255,13 +255,13 @@ class AppRepositoryImpl implements AppRepository {
 
   @override
   Future<ApiResponse<ForgotPasswordModel>> forgotPassword({
-    required String email, required String newPassword
+    required String email,
   }) async {
     try {
       dynamic response = await _httpManager.restRequest(
         url: ApiEndpoints().forgotPassword,
         method: HttpMethods.post,
-        body: {'email': email, 'newPassword' : newPassword},
+        body: {'email': email, 'newPassword': "string"},
       );
 
       if (response != null) {
@@ -278,14 +278,14 @@ class AppRepositoryImpl implements AppRepository {
 
   @override
   Future<ApiResponse<ResetPasswordModel>> resetPassword({
-    required String code,
+    required String token,
     required String newPassword,
   }) async {
     try {
       dynamic response = await _httpManager.restRequest(
         url: ApiEndpoints().resetPassword,
         method: HttpMethods.post,
-        body: {'code': code, 'newPassword': newPassword},
+        body: {'token': token, 'newPassword': newPassword},
       );
 
       if (response != null) {

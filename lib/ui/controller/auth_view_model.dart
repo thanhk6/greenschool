@@ -211,12 +211,13 @@ class AuthViewModel extends GetxController {
     );
   }
 
-  Future<void> forgotPassword({required String email, required String newPassword}) async {
+  Future<void> forgotPassword({
+    required String email,
+  }) async {
     forgotPasswordResponse.value = ApiResponse.loading();
 
     ApiResponse<ForgotPasswordModel> result = await _api.forgotPassword(
       email: email,
-      newPassword: newPassword
     );
 
     result.when(
@@ -233,13 +234,13 @@ class AuthViewModel extends GetxController {
   }
 
   Future<void> resetPassword({
-    required String code,
+    required String token,
     required String newPassword,
   }) async {
     resetPasswordResponse.value = ApiResponse.loading();
 
     ApiResponse<ResetPasswordModel> result = await _api.resetPassword(
-      code: code,
+      token: token,
       newPassword: newPassword,
     );
     result.when(

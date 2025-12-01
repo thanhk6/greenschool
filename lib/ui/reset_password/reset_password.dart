@@ -3,25 +3,26 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:green_school/remote/model/login/login_model.dart';
-import 'package:green_school/remote/model/login/user_login_model.dart';
 import 'package:green_school/remote/response/api_response.dart';
 import 'package:green_school/router/screen_name.dart';
 import 'package:green_school/ui/controller/auth_view_model.dart';
 import 'package:shimmer/shimmer.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({super.key});
+class ResetPasswordScreen extends StatefulWidget {
+  const ResetPasswordScreen({super.key});
 
   @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   AuthViewModel viewModel = Get.find<AuthViewModel>();
 
   final box = GetStorage();
 
-  TextEditingController usernameController = TextEditingController();
+  TextEditingController tokenController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController rePasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +37,39 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Image.asset("assets/images/ic_logo.png", height: 250),
               const SizedBox(height: 150),
               TextField(
-                controller: usernameController,
+                controller: tokenController,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  hintText: "Email",
+                  hintText: "Mã đặt mật khẩu",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: "Mật khẩu mới",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15),
+              TextField(
+                controller: rePasswordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: "Nhập lại mật khẩu mới",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -48,12 +77,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
               ),
               Obx(() {
-                return viewModel.forgotPasswordResponse.value.when(
+                return viewModel.resetPasswordResponse.value.when(
                   loading: () => Container(),
                   success: (data) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       String title = data.message;
-                      int statusCode = data.statusCode;
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -67,11 +95,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     context,
                                     rootNavigator: true,
                                   ).pop();
-                                  viewModel.forgotPasswordResponse.value =
+                                  viewModel.resetPasswordResponse.value =
                                       ApiResponse.loading();
-                                  if (statusCode == 200) {
-                                    Get.toNamed(ScreenNames.resetPassword);
-                                  }
                                 },
                                 child: const Text('OK'),
                               ),
@@ -96,10 +121,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 width: 150,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (usernameController.text.isNotEmpty) {
-                      viewModel.forgotPassword(email: usernameController.text);
+                    if (tokenController.text.isNotEmpty &&
+                        passwordController.text.isNotEmpty &&
+                        rePasswordController.text.isNotEmpty) {
+                      if (passwordController.text ==
+                          rePasswordController.text) {
+                        viewModel.resetPassword(
+                          token: tokenController.text,
+                          newPassword: passwordController.text,
+                        );
+                      } else {
+                        showToast("Mật khẩu xác nhận không giống nhau");
+                      }
                     } else {
-                      showToast("Không được để trống địa chỉ email");
+                      showToast(
+                        "Không được để trống địa chỉ email hoặc mật khẩu",
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(

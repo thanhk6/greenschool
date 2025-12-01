@@ -6,8 +6,8 @@ part of 'reset_password_model.dart';
 
 ResetPasswordModel _$ResetPasswordModelFromJson(Map<String, dynamic> json) =>
     ResetPasswordModel(
-      message: json['message'] as String?,
-      statusCode: (json['statusCode'] as num?)?.toInt(),
+      message: json['message'] ?? '',
+      statusCode: json['statusCode'] ?? 0,
       data: const DataOrBoolConverter().fromJson(json['data']),
     );
 

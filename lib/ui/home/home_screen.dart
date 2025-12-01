@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:green_school/main.dart';
 import 'package:green_school/remote/response/api_response.dart';
 import 'package:green_school/router/screen_name.dart';
 import 'package:green_school/ui/controller/auth_view_model.dart';
@@ -17,12 +18,29 @@ class HomeScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _HomeScreen();
 }
 
-class _HomeScreen extends State<HomeScreen> {
+class _HomeScreen extends State<HomeScreen> with RouteAware {
   AuthViewModel viewModel = Get.find<AuthViewModel>();
 
   @override
   void initState() {
     super.initState();
+    viewModel.getInfo();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
     viewModel.getInfo();
   }
 
@@ -69,7 +87,7 @@ class _HomeScreen extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    BannerSlider(),
+                    // BannerSlider(),
                     SizedBox(
                       width: double.infinity,
                       height: 500,
