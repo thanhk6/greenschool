@@ -6,7 +6,6 @@ import 'package:green_school/main.dart';
 import 'package:green_school/remote/response/api_response.dart';
 import 'package:green_school/router/screen_name.dart';
 import 'package:green_school/ui/controller/auth_view_model.dart';
-import 'package:green_school/ui/home/widget/banner_slider.dart';
 import 'package:green_school/ui/home/widget/home_header.dart';
 import 'package:green_school/ui/home/widget/home_list.dart';
 import 'package:webview_flutter/webview_flutter.dart';

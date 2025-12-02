@@ -97,6 +97,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                   ).pop();
                                   viewModel.resetPasswordResponse.value =
                                       ApiResponse.loading();
+                                  Get.back();
                                 },
                                 child: const Text('OK'),
                               ),

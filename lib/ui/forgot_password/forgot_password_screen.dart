@@ -3,7 +3,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:green_school/remote/model/login/login_model.dart';
-import 'package:green_school/remote/model/login/user_login_model.dart';
 import 'package:green_school/remote/response/api_response.dart';
 import 'package:green_school/router/screen_name.dart';
 import 'package:green_school/ui/controller/auth_view_model.dart';
@@ -70,7 +69,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                   viewModel.forgotPasswordResponse.value =
                                       ApiResponse.loading();
                                   if (statusCode == 200) {
-                                    Get.toNamed(ScreenNames.resetPassword);
+                                    Get.offNamed(ScreenNames.resetPassword);
                                   }
                                 },
                                 child: const Text('OK'),

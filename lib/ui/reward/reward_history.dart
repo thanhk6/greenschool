@@ -30,48 +30,58 @@ class _RewardHistoryState extends State<RewardHistory> {
     // Example data list
     List<Map<String, dynamic>> historyItems = [];
     viewModel.getRewardHistory();
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: _refreshData,
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(10, 60, 10, 20),
-              alignment: Alignment.center,
-              child: Text(
-                "Lịch sử đổi quà",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+    return SafeArea(
+      child: Scaffold(
+        body: RefreshIndicator(
+          onRefresh: _refreshData,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.black),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  const Expanded(
+                    child: Center(
+                      child: Text(
+                        "Lịch sử đổi quà",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 48), // To center title
+                ],
               ),
-            ),
-            Obx(() {
-              return viewModel.rewardHistoryResponse.value.when(
-                loading: () => Container(),
-                success: (data) {
-                  List<RedemptionHistoryItem> items = data.data.items;
-                  historyItems = List.generate(items.length, (index) {
-                    return {
-                      "date": TimeHelper.getTime(items[index].dateAdded),
-                      'rewardName': items[index].rewardName,
-                      'totalPointsSpent': items[index].totalPointsSpent,
-                      'quantity': items[index].quantity,
-                    };
-                  });
-                  return RewardHistoryItem(historyItems: historyItems);
-                },
-                error: (message) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    showToast(message);
-                  });
-                  return Container();
-                },
-              );
-            }),
-          ],
+              Obx(() {
+                return viewModel.rewardHistoryResponse.value.when(
+                  loading: () => Container(),
+                  success: (data) {
+                    List<RedemptionHistoryItem> items = data.data.items;
+                    historyItems = List.generate(items.length, (index) {
+                      return {
+                        "date": TimeHelper.getTime(items[index].dateAdded),
+                        'rewardName': items[index].rewardName,
+                        'totalPointsSpent': items[index].totalPointsSpent,
+                        'quantity': items[index].quantity,
+                      };
+                    });
+                    return RewardHistoryItem(historyItems: historyItems);
+                  },
+                  error: (message) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      showToast(message);
+                    });
+                    return Container();
+                  },
+                );
+              }),
+            ],
+          ),
         ),
       ),
     );
