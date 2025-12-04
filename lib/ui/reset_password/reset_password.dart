@@ -24,6 +24,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController rePasswordController = TextEditingController();
 
+  bool _obscurePassword = true;
+  bool _obscureRepassword = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +54,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               const SizedBox(height: 15),
               TextField(
                 controller: passwordController,
-                obscureText: true,
+                obscureText: _obscurePassword,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -60,12 +63,24 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
                   ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
                 ),
               ),
               const SizedBox(height: 15),
               TextField(
                 controller: rePasswordController,
-                obscureText: true,
+                obscureText: _obscureRepassword,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -73,6 +88,18 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureRepassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureRepassword = !_obscureRepassword;
+                      });
+                    },
                   ),
                 ),
               ),

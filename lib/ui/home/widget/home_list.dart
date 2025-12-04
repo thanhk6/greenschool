@@ -7,31 +7,31 @@ class HomeList extends StatelessWidget {
 
   final List<HomeItem> homeItems = [
     HomeItem(
-      imgUrl: "https://thpttnt.edu.vn/wp-content/uploads/2025/10/ANH-1-2.jpg",
+      imgUrl: "https://greenschool.io.vn/wp-content/uploads/2025/12/aboutgreen.jpg",
       link:
-          "https://thpttnt.edu.vn/truong-thpt-nhan-trung-long-trong-chuc-dai-hoi-cong-doan-bo-phan-nhiem-ky-2025-2030/",
+          "https://greenschool.io.vn/",
     ),
     HomeItem(
       imgUrl:
-          "https://moet.gov.vn/upload/2007219/fck/H%E1%BA%B1ng%20Moet/Quang%20c%E1%BA%A3nh%20h%E1%BB%99i%20ngh%E1%BB%8B.jpg",
+          "https://greenschool.io.vn/wp-content/uploads/2025/11/1-e1764211278869.jpg",
       link:
-          "https://thpttnt.edu.vn/toan-nganh-giao-duc-hoc-tap-trien-khai-nghi-quyet-71-nq-tw/",
+          "https://greenschool.io.vn/soi-noi-cuoc-thi-lop-hoc-xanh-sach-dep-tai-truong-thpt-than-nhan-trung/",
     ),
     HomeItem(
-      imgUrl: "https://thpttnt.edu.vn/wp-content/uploads/2025/11/a0.jpg",
+      imgUrl: "https://greenschool.io.vn/wp-content/uploads/2025/11/a66.jpg",
       link:
-          "https://thpttnt.edu.vn/thpt-nhan-trung-soi-noi-hoi-khoe-phu-dong-cap-truong-nam-hoc-2025-2026/",
+          "https://greenschool.io.vn/mo-hinh-doi-rac-lay-qua-lan-toa-loi-song-xanh/",
     ),
     HomeItem(
       imgUrl:
-          "https://thpttnt.edu.vn/wp-content/uploads/2025/10/z713754041774981d6323f06c6e9a0ccc6bb39a9187ca7.jpg",
+          "https://greenschool.io.vn/wp-content/uploads/2025/12/z7283738954511_4f6997908b40c2bc8d2f1f2c60ece2cb.jpg",
       link:
-          "https://thpttnt.edu.vn/phien-hop-dau-tien-xay-dung-de-thi-tot-nghiep-thpt-tren-may-tinh/",
+          "https://greenschool.io.vn/phan-loai-va-tai-che-rac-thai-nhua-dung-cach/",
     ),
     HomeItem(
-      imgUrl: "https://bafu.edu.vn/img/2025/dhkh(2).jpg",
+      imgUrl: "https://greenschool.io.vn/wp-content/uploads/2025/12/album-7-scaled.jpg",
       link:
-          "https://thpttnt.edu.vn/dai-hoi-chi-hoi-khuyen-hoc-lan-thu-nhiem-ky-2025-2030-dien-ra-thanh-cong-tot-dep/",
+          "https://greenschool.io.vn/phan-loai-rac-thai-dung-cach-bao-ve-ban-than-bao-ve-moi-truong/",
     ),
   ];
 

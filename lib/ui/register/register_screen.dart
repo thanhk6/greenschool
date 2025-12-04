@@ -26,6 +26,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordConfirmController = TextEditingController();
 
+  bool _obscurePassword = true;
+  bool _obscureRePassword = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 15),
               TextField(
-                obscureText: true,
+                obscureText: _obscurePassword,
                 controller: passwordController,
                 decoration: InputDecoration(
                   filled: true,
@@ -75,12 +78,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
                   ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
                 ),
               ),
               const SizedBox(height: 15),
               TextField(
                 controller: passwordConfirmController,
-                obscureText: true,
+                obscureText: _obscureRePassword,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -88,6 +103,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureRePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureRePassword = !_obscureRePassword;
+                      });
+                    },
                   ),
                 ),
               ),
