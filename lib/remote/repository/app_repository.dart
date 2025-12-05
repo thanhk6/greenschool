@@ -1,5 +1,6 @@
 import 'package:green_school/remote/model/bin/bin_model.dart';
 import 'package:green_school/remote/model/collection/collection_model.dart';
+import 'package:green_school/remote/model/delete_acc/delete_model.dart';
 import 'package:green_school/remote/model/event/event_create_model.dart';
 import 'package:green_school/remote/model/event/event_model.dart';
 import 'package:green_school/remote/model/forgot_password/forgot_password_model.dart';
@@ -33,4 +34,5 @@ abstract class AppRepository {
     required String token,
     required String newPassword,
   });
+  Future<ApiResponse<DeleteModel>> deleteAccount({required String password});
 }

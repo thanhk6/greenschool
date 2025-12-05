@@ -5,6 +5,7 @@ import 'package:green_school/remote/api/api_endpoints.dart';
 import 'package:green_school/remote/api/http_manager.dart';
 import 'package:green_school/remote/model/bin/bin_model.dart';
 import 'package:green_school/remote/model/collection/collection_model.dart';
+import 'package:green_school/remote/model/delete_acc/delete_model.dart';
 import 'package:green_school/remote/model/event/event_create_model.dart';
 import 'package:green_school/remote/model/event/event_model.dart';
 import 'package:green_school/remote/model/forgot_password/forgot_password_model.dart';
@@ -290,6 +291,32 @@ class AppRepositoryImpl implements AppRepository {
 
       if (response != null) {
         ResetPasswordModel jsonData = ResetPasswordModel.fromJson(response);
+        return ApiResponse.success(data: jsonData);
+      } else {
+        return ApiResponse.error(message: "Request data failed!!");
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return ApiResponse.error(message: e.toString());
+    }
+  }
+
+  @override
+  Future<ApiResponse<DeleteModel>> deleteAccount({required String password}) async {
+    String userToken = box.read(AppConst.USER_TOKEN) ?? '';
+    try {
+      dynamic response = await _httpManager.restRequest(
+        url: "${ApiEndpoints().deleteAccount}?password=$password",
+        method: HttpMethods.delete,
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json',
+          'Authorization': 'Bearer $userToken',
+        },
+      );
+
+      if (response != null) {
+        DeleteModel jsonData = DeleteModel.fromJson(response);
         return ApiResponse.success(data: jsonData);
       } else {
         return ApiResponse.error(message: "Request data failed!!");

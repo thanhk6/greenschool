@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:green_school/remote/response/api_response.dart';
 import 'package:green_school/router/screen_name.dart';
+import 'package:green_school/ui/controller/auth_view_model.dart';
 import 'package:green_school/utils/app_const.dart';
 
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
 
+  @override
+  State<StatefulWidget> createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
+  TextEditingController _passwordController = TextEditingController();
+  bool _obscurePassword = true;
+  AuthViewModel viewModel = Get.find<AuthViewModel>();
+  final box = GetStorage();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,6 +91,7 @@ class AccountScreen extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           Navigator.of(context, rootNavigator: true).pop();
+                          box.write(AppConst.USER_TOKEN, "");
                           enterLogin();
                         },
                         child: const Text('OK'),
@@ -111,8 +124,108 @@ class AccountScreen extends StatelessWidget {
               ),
             ),
           ),
+          GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Bạn có muốn xóa tài khoản?'),
+                    content: TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: "Mật khẩu",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          if (_passwordController.text.isNotEmpty) {
+                            viewModel.deleteAccount(
+                              password: _passwordController.text,
+                            );
+                          } else {
+                            showToast('Vui lòng điền mật khẩu');
+                          }
+                        },
+                        child: const Text('OK'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        },
+                        child: const Text('CANCEL'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 3,
+              margin: const EdgeInsets.all(8),
+              child: Container(
+                width: double.infinity,
+                margin: const EdgeInsets.fromLTRB(10, 7, 10, 7),
+                padding: const EdgeInsets.fromLTRB(10, 7, 10, 7),
+                child: Text(
+                  "Xóa tài khoản",
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ),
+            ),
+          ),
+          Obx(() {
+            return viewModel.deleteAccountResponse.value.when(
+              loading: () => Container(),
+              success: (data) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (data.statusCode == 200) {
+                    viewModel.deleteAccountResponse.value =
+                        ApiResponse.loading();
+                    box.write(AppConst.USER_TOKEN, "");
+                    enterLogin();
+                  } else {
+                    debugPrint('STATUS_CODE 400');
+                    showToast(data.message);
+                  }
+                });
+                return Container();
+              },
+              error: (message) {
+                debugPrint('ERROR: $message !!!!!!!!!!!!!');
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  showToast(message);
+                });
+                return Container();
+              },
+            );
+          }),
         ],
       ),
+    );
+  }
+
+  showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.black54,
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 

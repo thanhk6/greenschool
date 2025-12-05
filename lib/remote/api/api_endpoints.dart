@@ -8,7 +8,7 @@ class ApiEndpoints {
   final String postBinEvent =
       "https://api.greenschool.io.vn/api/CollectionEvent/create/";
   final String getCollectionEvent =
-      "https://api.greenschool.io.vn/api/CollectionEvent/GetAllPaging/";
+      "https://api.greenschool.io.vn/api/CollectionEvent/get-EventBy";
   final String getInfo =
       "https://api.greenschool.io.vn/api/Reward/PointsBalance/";
   final String getReward = "https://api.greenschool.io.vn/api/Reward/paging/";
@@ -20,4 +20,6 @@ class ApiEndpoints {
       "https://api.greenschool.io.vn/api/UserApp/forgot-password";
   final String resetPassword =
       "https://api.greenschool.io.vn/api/UserApp/reset-password";
+  final String deleteAccount =
+      'https://api.greenschool.io.vn/api/UserApp/delete';
 }

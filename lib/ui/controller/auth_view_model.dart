@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:green_school/remote/model/bin/bin_model.dart';
 import 'package:green_school/remote/model/collection/collection_model.dart';
+import 'package:green_school/remote/model/delete_acc/delete_model.dart';
 import 'package:green_school/remote/model/event/event_create_model.dart';
 import 'package:green_school/remote/model/event/event_model.dart';
 import 'package:green_school/remote/model/forgot_password/forgot_password_model.dart';
@@ -44,6 +45,8 @@ class AuthViewModel extends GetxController {
       const ApiResponse<ForgotPasswordModel>.loading().obs;
   Rx<ApiResponse<ResetPasswordModel>> resetPasswordResponse =
       const ApiResponse<ResetPasswordModel>.loading().obs;
+  Rx<ApiResponse<DeleteModel>> deleteAccountResponse =
+      const ApiResponse<DeleteModel>.loading().obs;
 
   Future<void> login({required UserLoginModel model}) async {
     loginResponse.value = ApiResponse.loading();
@@ -252,6 +255,25 @@ class AuthViewModel extends GetxController {
       },
       error: (error) {
         resetPasswordResponse.value = ApiResponse.error(message: error);
+      },
+    );
+  }
+
+  Future<void> deleteAccount({required password}) async {
+    deleteAccountResponse.value = ApiResponse.loading();
+
+    ApiResponse<DeleteModel> result = await _api.deleteAccount(
+      password: password,
+    );
+    result.when(
+      loading: () {
+        deleteAccountResponse.value = ApiResponse.loading();
+      },
+      success: (data) {
+        deleteAccountResponse.value = ApiResponse.success(data: data);
+      },
+      error: (error) {
+        deleteAccountResponse.value = ApiResponse.error(message: error);
       },
     );
   }

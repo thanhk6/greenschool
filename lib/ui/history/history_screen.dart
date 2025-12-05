@@ -21,7 +21,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     // Simulate a network call or data fetching
     await Future.delayed(const Duration(seconds: 2));
     setState(() {
-     viewModel.getCollection();
+      viewModel.getCollection();
     });
   }
 
@@ -32,49 +32,45 @@ class _HistoryScreenState extends State<HistoryScreen> {
     viewModel.getCollection();
     return Scaffold(
       body: RefreshIndicator(
-        onRefresh: _refreshData, 
+        onRefresh: _refreshData,
         child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(10, 60, 10, 20),
-            alignment: Alignment.center,
-            child: Text(
-              "Lịch sử",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(10, 60, 10, 20),
+              alignment: Alignment.center,
+              child: Text(
+                "Lịch sử",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
             ),
-          ),
-          Obx(() {
-            return viewModel.collectionResponse.value.when(
-              loading: () => Container(),
-              success: (data) {
-                List<CollectionItem> items = data.data.items;
-                historyItems = List.generate(items.length, (index) {
-                  return {
-                    "date": TimeHelper.getTime(items[index].dateAdded),
-                    'name': items[index].binCode,
-                    'type': items[index].wasteTypeName,
-                    'quantity': items[index].quantity,
-                    'unit': items[index].unitName,
-                    'point': items[index].earnedPoints,
-                  };
-                });
-                return CollectionWidget(historyItems: historyItems);
-              },
-              error: (message) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  showToast(message);
-                });
-                return Container();
-              },
-            );
-          }),
-        ],
-      ))
+            Obx(() {
+              return viewModel.collectionResponse.value.when(
+                loading: () => Container(),
+                success: (data) {
+                  List<CollectionItem> items = data.data.items;
+                  historyItems = List.generate(items.length, (index) {
+                    return {
+                      "date": TimeHelper.getTime(items[index].dateAdded),
+                      'name': items[index].binCode,
+                      'type': items[index].wasteTypeName,
+                      'quantity': items[index].quantity,
+                      'unit': items[index].unitName,
+                      'point': items[index].earnedPoints,
+                    };
+                  });
+                  return CollectionWidget(historyItems: historyItems);
+                },
+                error: (message) => Container(),
+              );
+            }),
+          ],
+        ),
+      ),
     );
   }
 
@@ -90,4 +86,3 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 }
-
