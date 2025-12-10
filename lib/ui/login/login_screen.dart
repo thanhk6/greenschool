@@ -227,6 +227,13 @@ class _LoginScreenState extends State<LoginScreen> {
     debugPrint("Login Pressed");
     if (usernameController.text.isNotEmpty &&
         passwordController.text.isNotEmpty) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator());
+        },
+      );
       viewModel.login(
         model: UserLoginModel(
           email: usernameController.text,
