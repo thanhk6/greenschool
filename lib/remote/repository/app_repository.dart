@@ -1,3 +1,4 @@
+import 'package:green_school/remote/model/ai/ai_model.dart';
 import 'package:green_school/remote/model/bin/bin_model.dart';
 import 'package:green_school/remote/model/collection/collection_model.dart';
 import 'package:green_school/remote/model/delete_acc/delete_model.dart';
@@ -35,4 +36,8 @@ abstract class AppRepository {
     required String newPassword,
   });
   Future<ApiResponse<DeleteModel>> deleteAccount({required String password});
+  Future<ApiResponse<AiModel>> analyzeImage({
+    required String imageBase64,
+    required int wasteTypeID,
+  });
 }

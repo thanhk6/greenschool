@@ -63,6 +63,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                 String qrCode = data.data.resultObj.qrCode.toString();
                 String locationName = data.data.resultObj.locationName
                     .toString();
+                int wasteTypeId = data.data.resultObj.wasteTypeId;
                 String address = data.data.resultObj.address.toString();
                 String wasteTypeName = data.data.resultObj.wasteTypeName
                     .toString();
@@ -78,6 +79,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                       qrCode,
                       locationName,
                       address,
+                      wasteTypeId,
                       wasteTypeName,
                       unitName,
                     ],

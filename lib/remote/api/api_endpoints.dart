@@ -22,4 +22,6 @@ class ApiEndpoints {
       "https://api.greenschool.io.vn/api/UserApp/reset-password";
   final String deleteAccount =
       'https://api.greenschool.io.vn/api/UserApp/delete';
+  final String analyzeImage =
+      'https://api.greenschool.io.vn/api/CollectionEvent/analyze-image';
 }

@@ -12,4 +12,5 @@ abstract class ScreenNames {
   static const String rewardHistory = "/rewardHistory";
   static const String forgotPassword = "/forgotPassword";
   static const String resetPassword = "/resetPassword";
+  static const String camera = "/camera";
 }

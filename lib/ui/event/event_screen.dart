@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:green_school/remote/model/event/event_create_model.dart';
 import 'package:green_school/remote/response/api_response.dart';
 import 'package:green_school/ui/controller/auth_view_model.dart';
+import 'package:green_school/ui/event/camera_screen.dart';
+import 'dart:convert';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({super.key});
@@ -23,10 +25,16 @@ class _EventScreenState extends State<EventScreen> {
   static const int QR_CODE = 3;
   static const int LOCATION_NAME = 4;
   static const int ADDRESS = 5;
-  static const int WASTE_TYPE_NAME = 6;
-  static const int UNIT_NAME = 7;
+  static const int WASTE_TYPE_ID = 6;
+  static const int WASTE_TYPE_NAME = 7;
+  static const int UNIT_NAME = 8;
 
   TextEditingController quantityController = TextEditingController();
+  String aiMessage = '_';
+  String? base64Image;
+
+  bool get isSubmitEnabled =>
+      quantityController.text.isNotEmpty && aiMessage.isEmpty;
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +114,7 @@ class _EventScreenState extends State<EventScreen> {
                       buildDivider(),
                       buildInfoItem("Loại rác", data[WASTE_TYPE_NAME]),
                       buildDivider(),
+                      buildInfoItemCamera(context),
 
                       Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -152,6 +161,30 @@ class _EventScreenState extends State<EventScreen> {
                           ],
                         ),
                       ),
+                      Obx(() {
+                        return viewModel.aiResponse.value.when(
+                          loading: () => Container(),
+                          success: (data) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (data.data is String) {
+                                aiMessage = data.data;
+                                showToast(
+                                  "${data.data} - Vui lòng chụp lại ảnh",
+                                );
+                              } else {
+                                aiMessage = '';
+                              }
+                            });
+                            return Container();
+                          },
+                          error: (message) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              showToast(message);
+                            });
+                            return Container();
+                          },
+                        );
+                      }),
                       Center(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
@@ -197,13 +230,17 @@ class _EventScreenState extends State<EventScreen> {
   void createRequest() {
     debugPrint("Create event request");
     if (quantityController.text.isNotEmpty) {
-      viewModel.createEvent(
-        model: EventCreateModel(
-          userAppId: data[USER_APP_ID],
-          binId: data[BIN_ID],
-          quantity: double.parse(quantityController.text),
-        ),
-      );
+      if (aiMessage.isNotEmpty) {
+        showToast("$aiMessage - Vui lòng chụp ảnh rác");
+      } else {
+        viewModel.createEvent(
+          model: EventCreateModel(
+            userAppId: data[USER_APP_ID],
+            binId: data[BIN_ID],
+            quantity: double.parse(quantityController.text),
+          ),
+        );
+      }
     } else {
       showToast("Nhập khối lượng/số lượng rác!!");
     }
@@ -220,23 +257,92 @@ class _EventScreenState extends State<EventScreen> {
       fontSize: 16.0,
     );
   }
-}
 
-Widget buildInfoItem(String title, String value) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+  Widget buildInfoItem(String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 4),
+          Text(value, style: const TextStyle(fontSize: 16)),
+        ],
+      ),
+    );
+  }
+
+  Widget buildDivider() => const Divider(height: 1, color: Colors.black54);
+
+  Widget buildInfoItemCamera(BuildContext context) {
+    Widget imageWidget;
+    if (base64Image != null && base64Image!.isNotEmpty) {
+      imageWidget = ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.memory(
+          // Decode base64 to bytes
+          Uri.parse(base64Image!).data != null
+              ? Uri.parse(base64Image!).data!.contentAsBytes()
+              : base64Decode(base64Image!),
+          width: double.infinity,
+          height: 120,
+          fit: BoxFit.cover,
         ),
-        const SizedBox(height: 4),
-        Text(value, style: const TextStyle(fontSize: 16)),
-      ],
-    ),
-  );
-}
+      );
+    } else {
+      imageWidget = const Icon(Icons.camera_alt, size: 48, color: Colors.grey);
+    }
 
-Widget buildDivider() => const Divider(height: 1, color: Colors.black54);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: GestureDetector(
+        child: Container(
+          width: double.infinity,
+          height: 150,
+          decoration: BoxDecoration(
+            color: const Color(0xFFEEEEEE),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              imageWidget,
+              const SizedBox(height: 12),
+              const Text(
+                'Chụp ảnh rác để AI nhận diện',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+        onTap: () {
+          openCameraAndGetBase64(context);
+        },
+      ),
+    );
+  }
+
+  void openCameraAndGetBase64(BuildContext context) async {
+    final base64String = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const CameraScreen()),
+    );
+    if (base64String != null && base64String is String) {
+      setState(() {
+        base64Image = base64String;
+      });
+      viewModel.analyzeImage(
+        imageBase64: base64String,
+        wasteTypeID: data[WASTE_TYPE_ID],
+      );
+    }
+  }
+}

@@ -4,6 +4,8 @@ import 'package:green_school/ui/account/account_screen.dart';
 import 'package:green_school/ui/account/account_screen_bindings.dart';
 import 'package:green_school/ui/base/base_screen.dart';
 import 'package:green_school/ui/base/base_screen_binding.dart';
+import 'package:green_school/ui/event/camera_screen.dart';
+import 'package:green_school/ui/event/camera_screen_binding.dart';
 import 'package:green_school/ui/event/event_screen.dart';
 import 'package:green_school/ui/event/event_screen_binding.dart';
 import 'package:green_school/ui/forgot_password/forgot_password_binding.dart';
@@ -87,6 +89,11 @@ abstract class AppScreens {
       name: ScreenNames.resetPassword,
       page: () => const ResetPasswordScreen(),
       bindings: [ResetPasswordBinding()],
+    ),
+    GetPage(
+      name: ScreenNames.camera,
+      page: () => const CameraScreen(),
+      bindings: [CameraScreenBinding()],
     ),
   ];
 }

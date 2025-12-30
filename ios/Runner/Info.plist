@@ -29,6 +29,8 @@
     <key>NSCameraUsageDescription</key>
     <string>Ứng dụng cần quyền camera để quét QR code.</string>
     <key>UIApplicationSceneManifest</key>
+    <key>NSCameraUsageDescription</key>
+    <string>Camera access is required to take photos</string>
     <dict>
       <key>UIApplicationSupportsMultipleScenes</key>
       <false/>

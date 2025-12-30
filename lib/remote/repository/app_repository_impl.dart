@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:green_school/remote/api/api_endpoints.dart';
 import 'package:green_school/remote/api/http_manager.dart';
+import 'package:green_school/remote/model/ai/ai_model.dart';
 import 'package:green_school/remote/model/bin/bin_model.dart';
 import 'package:green_school/remote/model/collection/collection_model.dart';
 import 'package:green_school/remote/model/delete_acc/delete_model.dart';
@@ -302,7 +303,9 @@ class AppRepositoryImpl implements AppRepository {
   }
 
   @override
-  Future<ApiResponse<DeleteModel>> deleteAccount({required String password}) async {
+  Future<ApiResponse<DeleteModel>> deleteAccount({
+    required String password,
+  }) async {
     String userToken = box.read(AppConst.USER_TOKEN) ?? '';
     try {
       dynamic response = await _httpManager.restRequest(
@@ -317,6 +320,36 @@ class AppRepositoryImpl implements AppRepository {
 
       if (response != null) {
         DeleteModel jsonData = DeleteModel.fromJson(response);
+        return ApiResponse.success(data: jsonData);
+      } else {
+        return ApiResponse.error(message: "Request data failed!!");
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return ApiResponse.error(message: e.toString());
+    }
+  }
+
+  @override
+  Future<ApiResponse<AiModel>> analyzeImage({
+    required String imageBase64,
+    required int wasteTypeID,
+  }) async {
+    String userToken = box.read(AppConst.USER_TOKEN) ?? '';
+    try {
+      dynamic response = await _httpManager.restRequest(
+        url: ApiEndpoints().analyzeImage,
+        method: HttpMethods.post,
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json',
+          'Authorization': 'Bearer $userToken',
+        },
+        body: {'imageBase64': imageBase64, 'wasteTypeID': wasteTypeID},
+      );
+
+      if (response != null) {
+        AiModel jsonData = AiModel.fromJson(response);
         return ApiResponse.success(data: jsonData);
       } else {
         return ApiResponse.error(message: "Request data failed!!");

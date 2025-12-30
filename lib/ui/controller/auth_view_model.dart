@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:green_school/remote/model/ai/ai_model.dart';
 import 'package:green_school/remote/model/bin/bin_model.dart';
 import 'package:green_school/remote/model/collection/collection_model.dart';
 import 'package:green_school/remote/model/delete_acc/delete_model.dart';
@@ -47,6 +48,8 @@ class AuthViewModel extends GetxController {
       const ApiResponse<ResetPasswordModel>.loading().obs;
   Rx<ApiResponse<DeleteModel>> deleteAccountResponse =
       const ApiResponse<DeleteModel>.loading().obs;
+  Rx<ApiResponse<AiModel>> aiResponse =
+      const ApiResponse<AiModel>.loading().obs;
 
   Future<void> login({required UserLoginModel model}) async {
     loginResponse.value = ApiResponse.loading();
@@ -214,9 +217,7 @@ class AuthViewModel extends GetxController {
     );
   }
 
-  Future<void> forgotPassword({
-    required String email,
-  }) async {
+  Future<void> forgotPassword({required String email}) async {
     forgotPasswordResponse.value = ApiResponse.loading();
 
     ApiResponse<ForgotPasswordModel> result = await _api.forgotPassword(
@@ -274,6 +275,29 @@ class AuthViewModel extends GetxController {
       },
       error: (error) {
         deleteAccountResponse.value = ApiResponse.error(message: error);
+      },
+    );
+  }
+
+  Future<void> analyzeImage({
+    required String imageBase64,
+    required int wasteTypeID,
+  }) async {
+    aiResponse.value = ApiResponse.loading();
+
+    ApiResponse<AiModel> result = await _api.analyzeImage(
+      imageBase64: imageBase64,
+      wasteTypeID: wasteTypeID,
+    );
+    result.when(
+      loading: () {
+        aiResponse.value = ApiResponse.loading();
+      },
+      success: (data) {
+        aiResponse.value = ApiResponse.success(data: data);
+      },
+      error: (error) {
+        aiResponse.value = ApiResponse.error(message: error);
       },
     );
   }
