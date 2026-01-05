@@ -30,7 +30,7 @@ class _EventScreenState extends State<EventScreen> {
   static const int UNIT_NAME = 8;
 
   TextEditingController quantityController = TextEditingController();
-  String aiMessage = '_';
+  String aiMessage = '';
   String? base64Image;
 
   bool get isSubmitEnabled =>
@@ -82,6 +82,7 @@ class _EventScreenState extends State<EventScreen> {
                     showToast("Tạo sự kiện đổ rác thành công");
                     Get.back();
                     viewModel.eventResponse.value = ApiResponse.loading();
+                    viewModel.aiResponse.value = ApiResponse.loading();
                   });
                   return Container();
                 },
@@ -163,18 +164,34 @@ class _EventScreenState extends State<EventScreen> {
                       ),
                       Obx(() {
                         return viewModel.aiResponse.value.when(
-                          loading: () => Container(),
+                          loading: () {
+                            aiMessage = '';
+                            return Container();
+                          },
                           success: (data) {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               if (data.data is String) {
                                 aiMessage = data.data;
-                                showToast(
-                                  "${data.data} - Vui lòng chụp lại ảnh",
+                                showDialog(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    title: const Text("Thông báo!"),
+                                    content: Text(aiMessage),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(ctx).pop();
+                                        },
+                                        child: const Text("OK"),
+                                      ),
+                                    ],
+                                  ),
                                 );
                               } else {
                                 aiMessage = '';
                               }
                             });
+                            viewModel.aiResponse.value = ApiResponse.loading();
                             return Container();
                           },
                           error: (message) {
@@ -231,7 +248,22 @@ class _EventScreenState extends State<EventScreen> {
     debugPrint("Create event request");
     if (quantityController.text.isNotEmpty) {
       if (aiMessage.isNotEmpty) {
-        showToast("$aiMessage - Vui lòng chụp ảnh rác");
+        // showToast(aiMessage);
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text("Thông báo!"),
+            content: Text(aiMessage),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
       } else {
         viewModel.createEvent(
           model: EventCreateModel(
